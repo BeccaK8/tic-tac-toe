@@ -204,3 +204,6 @@ function checkTie() {
 //==================================================================
 // add an event listener to the squares that triggers when one is picked
 document.getElementById('squares').addEventListener('click', handlePick);
+
+// add an event listener to the reset game button that will trigger initialize
+resetButton.addEventListener('click', init);
