@@ -41,9 +41,9 @@ const resetButton = document.querySelector('button');
 // save squares as an array rather than a NodeList
 const squaresEl = [...document.querySelectorAll('#squares > div')];
 
-console.log('messageEl at cached', messageEl);
-console.log('resetButton at cached', resetButton);
-console.log('squaresEl at cached', squaresEl);
+// console.log('messageEl at cached', messageEl);
+// console.log('resetButton at cached', resetButton);
+// console.log('squaresEl at cached', squaresEl);
 
 //==================================================================
 // functions 
@@ -62,9 +62,9 @@ function init() {
     winner = null;
     squareSelected = false;
 
-    console.log('board in init', board);
-    console.log('turn in init', turn);
-    console.log('winner in init', winner);
+    // console.log('board in init', board);
+    // console.log('turn in init', turn);
+    // console.log('winner in init', winner);
 
     // render the board, message, and controls
     render();
@@ -91,9 +91,9 @@ function renderBoard() {
         rowArr.forEach((cellVal, colIdx) => {
             // find the element for that square
             const cellId = `r${rowIdx}c${colIdx}`;
-            console.log('cellId in renderBoard', cellId);
+            // console.log('cellId in renderBoard', cellId);
             const squareEl = document.getElementById(cellId);
-            console.log('squareEl in renderBoard', squareEl);
+            // console.log('squareEl in renderBoard', squareEl);
             // to start with, just changing the background color to indicate marked
             squareEl.style.backgroundColor = colors[cellVal];
             // set the text of the square to the appropriate marker
@@ -106,7 +106,7 @@ function renderBoard() {
 
 // renderMessage updates the message on the screen to indicate winner, tie, or whose turn
 function renderMessage() {
-    console.log('squareSelected in beginning of renderMessage', squareSelected);
+    // console.log('squareSelected in beginning of renderMessage', squareSelected);
 
     // if tie, tell them nice try
     if (winner === 'T') {
@@ -121,13 +121,13 @@ function renderMessage() {
         // reset squareSelected
         squareSelected = false;
     }
-    console.log('squareSelected in end of renderMessage', squareSelected);
+    // console.log('squareSelected in end of renderMessage', squareSelected);
 }
 
 // renderControls determines if the reset button is displayed or not
 function renderControls() {
     // if there's not a winner, hide the button; otherwise show it
-    console.log('winner in renderControls', winner);
+    // console.log('winner in renderControls', winner);
     resetButton.style.visibility = winner ? 'visible' : 'hidden';
 }
 
@@ -141,19 +141,19 @@ function handlePick(event) {
     const squareIdx = squaresEl.indexOf(event.target)
     const rowIdx = Math.floor(squareIdx / 3);
     const colIdx = squareIdx % 3;
-    console.log('rowIdx  in handlePick', rowIdx);
-    console.log('colIdx  in handlePick', colIdx);
+
+    console.log('rowIdx in handlePick before checking invalids', rowIdx);
+    console.log('colIdx in handlePick before checking invalids', colIdx);
 
     // get the row array for the board
     const rowArr = board[rowIdx];
     console.log('rowArr in handlePick', rowArr);
 
-    // check if the move is valid
-    // if the move is invalid, just return so the user can pick again
+    // check if the move is invalid
     // a move is invalid in two ways:
-    //   1. they didn't selected a valid square
-    if (rowIdx === -1) return;
-    //   2. they picked a square that's already selected
+    //   1. they didn't selected a valid square - so just return
+    if (rowIdx === -1 || colIdx === -1) return;
+    //   2. they picked a square that's already selected - update squareSelected but don't return because we want board to be updated
     if (Math.abs(rowArr[colIdx]) === 1) {
         console.log('pick is already selected in handlePick');
         squareSelected = true;
@@ -165,15 +165,42 @@ function handlePick(event) {
         turn *= -1;
     
         // check for winner
+        console.log('winner before calling getWinner in handlePick', winner);
+        winner = getWinner(rowIdx, colIdx);
+        console.log('winner after calling getWinner in handlePick', winner);
     }    
 
     // update board, message, and controls
     render();
+
+    console.log('current state of board after handlePick', board);
 }
+
+function getWinner(rowIdx, colIdx) {
+    // check for tie
+    // check for horizontal win
+    // check for vertical win
+    // check for diagonal win
+    const winner = checkTie();
+    console.log('winner in getWinner', winner);
+    return winner;
+}
+
+function checkTie() {
+    // if there is at least one open spot on the board, there is no tie
+    for (let rowArr of board) {
+        for (let cell of rowArr) {
+            if (cell === 0) return null;
+        }
+    }
+    console.log('there are no 0s left in checkTie');
+    // no open spots if we made it out of double loops, so it's a tie
+    return 'T';
+}
+
 
 //==================================================================
 // event listeners
 //==================================================================
 // add an event listener to the squares that triggers when one is picked
 document.getElementById('squares').addEventListener('click', handlePick);
-
