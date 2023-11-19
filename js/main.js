@@ -184,7 +184,8 @@ function getWinner(rowIdx, colIdx) {
     return checkTie() 
         || checkHorizontalWin(rowIdx, colIdx)
         || checkVerticalWin(rowIdx, colIdx)
-        || checkDiagonalNWtoSEWin(rowIdx, colIdx);
+        || checkDiagonalNWtoSEWin(rowIdx, colIdx)
+        || checkDiagonalNEtoSWWin(rowIdx, colIdx);
 }
 
 function checkTie() {
@@ -224,6 +225,15 @@ function checkDiagonalNWtoSEWin(rowIdx, colIdx) {
     // if there are two adjacent squares, then return the player at that cell because they won
     // otherwise, there is no horizontal win
     return countNW + countSE === 2 ? board[rowIdx][colIdx] : null;
+}
+
+function checkDiagonalNEtoSWWin(rowIdx, colIdx) {
+    // count the number of adjacent squares NE and SW from the last picked square
+    const countNE = countAdjacentSquares(rowIdx, colIdx, -1, 1);
+    const countSW = countAdjacentSquares(rowIdx, colIdx, 1, -1);
+    // if there are two adjacent squares, then return the player at that cell because they won
+    // otherwise, there is no horizontal win
+    return countNE + countSW === 2 ? board[rowIdx][colIdx] : null;
 }
 
 function countAdjacentSquares(rowIdx, colIdx, rowOffset, colOffset) {
