@@ -30,6 +30,7 @@ const colors = {
 let board;  // this will be a 3x3 nested array
 let turn;   // 1 || -1, depending on whose turn it is
 let winner; // null || 1 || -1 || 'T' (tie), depending on who, if anyone, has won
+let squareSelected; // true || false depending on if the square was already picked
 
 //==================================================================
 // cached DOM elements
@@ -59,6 +60,7 @@ function init() {
     // set the first turn and winner
     turn = 1;
     winner = null;
+    squareSelected = false;
 
     console.log('board in init', board);
     console.log('turn in init', turn);
@@ -104,7 +106,7 @@ function renderBoard() {
 
 // renderMessage updates the message on the screen to indicate winner, tie, or whose turn
 function renderMessage() {
-    
+
     // if tie, tell them nice try
     if (winner === 'T') {
         messageEl.innerText = "CAT! It's a Tie!";
@@ -124,7 +126,49 @@ function renderControls() {
     resetButton.style.visibility = winner ? 'visible' : 'hidden';
 }
 
+// handlePick will be the game play function
+function handlePick(event) {
+    console.log('pick made!  (inside handlePick)');
+
+    // first figure out what row and column were selected
+    // index of the squares will be 0 - 8, so we need to calculate the actual row and col using DIV and MOD functions 
+    // to allow us to manipulate board array appropriately
+    const squareIdx = squaresEl.indexOf(event.target)
+    const rowIdx = Math.floor(squareIdx / 3);
+    const colIdx = squareIdx % 3;
+    console.log('rowIdx  in handlePick', rowIdx);
+    console.log('colIdx  in handlePick', colIdx);
+
+    // get the row array for the board
+    const rowArr = board[rowIdx];
+    console.log('rowArr in handlePick', rowArr);
+
+    // check if the move is valid
+    // if the move is invalid, just return so the user can pick again
+    // a move is invalid in two ways:
+    //   1. they didn't selected a valid square
+    if (rowIdx === -1) return;
+    //   2. they picked a square that's already selected
+    if (Math.abs(rowArr[colIdx]) === 1) {
+        squareSelected = true;
+        return;
+    }
+
+    // if the move is valid, update the board array accordingly
+    rowArr[colIdx] = turn;
+
+    // change whose turn it is
+    turn *= -1;
+
+    // check for winner
+
+    // update board, message, and controls
+    render();
+}
+
 //==================================================================
 // event listeners
 //==================================================================
+// add an event listener to the squares that triggers when one is picked
+document.getElementById('squares').addEventListener('click', handlePick);
 
