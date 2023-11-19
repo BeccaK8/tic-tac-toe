@@ -36,6 +36,17 @@ h2 {
     transition: transform 150ms ease-in;
 }
 
+.center {
+    /* vertical-align: center;
+    text-align: center; */
+    /* width: 50%;
+    margin: auto;
+     */
+    /* font-size: 75%; */
+    /* margin: auto; */
+    /* text-align: center; */
+}
+
 .top {
     border-top: 1vmin solid slategrey;
 }

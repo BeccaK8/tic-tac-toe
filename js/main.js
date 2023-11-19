@@ -17,6 +17,11 @@ const markers = {
     0: '',
     1: 'X',
     '-1': 'O'
+};
+const colors = {
+    0: 'white',
+    1: 'blue',
+    '-1': 'orange'
 }
 
 //==================================================================
@@ -59,11 +64,49 @@ function init() {
     console.log('turn in init', turn);
     console.log('winner in init', winner);
 
-    // render the board, message, and button
+    // render the board, message, and controls
+    render();
 }
 
 // call init to kick off the game
 init();
+
+// render the board, message, and controls
+function render() {
+    // render the board
+    renderBoard();
+    // render the message
+    // render the controls
+    renderControls();
+}
+
+// renderBoard will update the board to show X's and O's already selected
+function renderBoard() {
+    // loop through the board array, row by row
+    board.forEach((rowArr, rowIdx) => {
+        // for each row, loop through the columns
+        rowArr.forEach((cellVal, colIdx) => {
+            // find the element for that square
+            const cellId = `r${rowIdx}c${colIdx}`;
+            console.log('cellId in renderBoard', cellId);
+            const squareEl = document.getElementById(cellId);
+            console.log('squareEl in renderBoard', squareEl);
+            // to start with, just changing the background color to indicate marked
+            squareEl.style.backgroundColor = colors[cellVal];
+            // set the text of the square to the appropriate marker
+            // squareEl.innerHTML = `<h3>${markers[cellVal]}</h3>`;
+            // console.log('cellVal in renderBoard', cellVal);
+            // console.log('markers[cellVal] in renderBoard', markers[cellVal]);
+        });
+    });
+}
+
+// renderControls determines if the reset button is displayed or not
+function renderControls() {
+    // if there's not a winner, hide the button; otherwise show it
+    console.log('winner in renderControls', winner);
+    resetButton.style.visibility = winner ? 'visible' : 'hidden';
+}
 
 //==================================================================
 // event listeners
