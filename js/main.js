@@ -181,8 +181,9 @@ function getWinner(rowIdx, colIdx) {
     // check for horizontal win
     // check for vertical win
     // check for diagonal win
-    const winner = checkTie() || checkHorizontalWin(rowIdx, colIdx);
-    return winner;
+    return checkTie() 
+        || checkHorizontalWin(rowIdx, colIdx)
+        || checkVerticalWin(rowIdx, colIdx);
 }
 
 function checkTie() {
@@ -198,12 +199,21 @@ function checkTie() {
 }
 
 function checkHorizontalWin(rowIdx, colIdx) {
-    // count the number of adjacent squares to the left and to the right
+    // count the number of adjacent squares to the left and to the right of the last picked square
     const countLeft = countAdjacentSquares(rowIdx, colIdx, 0, -1);
     const countRight = countAdjacentSquares(rowIdx, colIdx, 0, 1);
     // if there are two adjacent squares, then return the player at that cell because they won
     // otherwise, there is no horizontal win
     return countLeft + countRight === 2 ? board[rowIdx][colIdx] : null;
+}
+
+function checkVerticalWin(rowIdx, colIdx) {
+    // count the number of adjacent squares up and down from the last picked square
+    const countUp = countAdjacentSquares(rowIdx, colIdx, -1, 0);
+    const countDown = countAdjacentSquares(rowIdx, colIdx, 1, 0);
+    // if there are two adjacent squares, then return the player at that cell because they won
+    // otherwise, there is no horizontal win
+    return countUp + countDown === 2 ? board[rowIdx][colIdx] : null;
 }
 
 function countAdjacentSquares(rowIdx, colIdx, rowOffset, colOffset) {
