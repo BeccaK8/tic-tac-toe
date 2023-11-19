@@ -4,6 +4,9 @@
 }
 
 body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-family: 'Quicksand', sans-serif;
     height: 100vh;
     margin: 0;
@@ -34,18 +37,33 @@ h2 {
 }
 
 .top {
-    border-top: 1vmin solid black;
+    border-top: 1vmin solid slategrey;
 }
 
 .bottom {
-    border-bottom: 1vmin solid black;
+    border-bottom: 1vmin solid slategrey;
 }
 
 .left {
-    border-left: 1vmin solid black;
+    border-left: 1vmin solid slategrey;
 }
 
 .right {
-    border-right: 1vmin solid black;
+    border-right: 1vmin solid slategrey;
+}
+
+button {
+    color: slategrey;
+    border: 0.1vmin solid slategrey;
+    border-radius: 2vmin;
+    font-size: 4vmin;
+    margin: 4vmin 0vmin;
+}
+
+button:hover {
+    color: white;
+    background-color: darkslategray;
+    transform: scale(1.2);
+    transition: transform 150ms ease-in-out;
 }
 
