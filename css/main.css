@@ -19,3 +19,33 @@ h2 {
     font-size: 4vmin;
     color: slategrey;
 }
+
+#squares {
+    display: grid;
+    grid-template-columns: repeat(3, 15vmin);
+    margin-top: 1vmin;
+}    
+
+#squares > div {
+    width: 100%;
+    height: 0;
+    padding-top: 100%;
+    transition: transform 150ms ease-in;
+}
+
+.top {
+    border-top: 1vmin solid black;
+}
+
+.bottom {
+    border-bottom: 1vmin solid black;
+}
+
+.left {
+    border-left: 1vmin solid black;
+}
+
+.right {
+    border-right: 1vmin solid black;
+}
+
