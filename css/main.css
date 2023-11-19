@@ -1,3 +1,21 @@
 * {
-    background-color: lightsteelblue;
+    /* background-color: lightsteelblue; */
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    color: darkslategrey;
+    font-size: 6vmin;
+    letter-spacing: 1vmin;
+}
+
+h2 {
+    font-size: 4vmin;
+    color: slategrey;
 }
