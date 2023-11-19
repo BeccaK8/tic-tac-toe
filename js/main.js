@@ -183,7 +183,8 @@ function getWinner(rowIdx, colIdx) {
     // check for diagonal win
     return checkTie() 
         || checkHorizontalWin(rowIdx, colIdx)
-        || checkVerticalWin(rowIdx, colIdx);
+        || checkVerticalWin(rowIdx, colIdx)
+        || checkDiagonalNWtoSEWin(rowIdx, colIdx);
 }
 
 function checkTie() {
@@ -193,7 +194,7 @@ function checkTie() {
             if (cell === 0) return null;
         }
     }
-    console.log('there are no 0s left in checkTie');
+    // console.log('there are no 0s left in checkTie');
     // no open spots if we made it out of double loops, so it's a tie
     return 'T';
 }
@@ -214,6 +215,15 @@ function checkVerticalWin(rowIdx, colIdx) {
     // if there are two adjacent squares, then return the player at that cell because they won
     // otherwise, there is no horizontal win
     return countUp + countDown === 2 ? board[rowIdx][colIdx] : null;
+}
+
+function checkDiagonalNWtoSEWin(rowIdx, colIdx) {
+    // count the number of adjacent squares NW and SE from the last picked square
+    const countNW = countAdjacentSquares(rowIdx, colIdx, -1, -1);
+    const countSE = countAdjacentSquares(rowIdx, colIdx, 1, 1);
+    // if there are two adjacent squares, then return the player at that cell because they won
+    // otherwise, there is no horizontal win
+    return countNW + countSE === 2 ? board[rowIdx][colIdx] : null;
 }
 
 function countAdjacentSquares(rowIdx, colIdx, rowOffset, colOffset) {
