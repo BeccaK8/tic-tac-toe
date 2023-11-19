@@ -181,8 +181,7 @@ function getWinner(rowIdx, colIdx) {
     // check for horizontal win
     // check for vertical win
     // check for diagonal win
-    const winner = checkTie();
-    console.log('winner in getWinner', winner);
+    const winner = checkTie() || checkHorizontalWin(rowIdx, colIdx);
     return winner;
 }
 
@@ -196,6 +195,46 @@ function checkTie() {
     console.log('there are no 0s left in checkTie');
     // no open spots if we made it out of double loops, so it's a tie
     return 'T';
+}
+
+function checkHorizontalWin(rowIdx, colIdx) {
+    // count the number of adjacent squares to the left and to the right
+    const countLeft = countAdjacentSquares(rowIdx, colIdx, 0, -1);
+    const countRight = countAdjacentSquares(rowIdx, colIdx, 0, 1);
+    // if there are two adjacent squares, then return the player at that cell because they won
+    // otherwise, there is no horizontal win
+    return countLeft + countRight === 2 ? board[rowIdx][colIdx] : null;
+}
+
+function countAdjacentSquares(rowIdx, colIdx, rowOffset, colOffset) {
+    // get the most recently played player
+    const player = board[rowIdx][colIdx];
+    console.log('player in countAdjacentSquares', player);
+
+    // set initial count of adjacent squares for same player
+    let countAdj = 0;
+
+    // move to the adjacent space utilizing the given offsets
+    rowIdx += rowOffset;
+    colIdx += colOffset;
+
+    // check the spaces around the last played square -
+    // make sure row exists
+    // make sure cell exists,
+    // and make sure same player
+    while (
+            board[rowIdx] !== undefined &&
+            board[rowIdx][colIdx] !== undefined &&
+            board[rowIdx][colIdx] === player 
+    ) {
+        // increment the count of adjacent squares for the same player
+        countAdj++;
+        //move to the next adjacent square
+        rowIdx += rowOffset;
+        colIdx += colOffset;
+    }
+    // return that count 
+    return countAdj;
 }
 
 
