@@ -37,14 +37,13 @@ h2 {
 }
 
 .center {
-    /* vertical-align: center;
-    text-align: center; */
+    text-align: center;
+    /* vertical-align: center; */
     /* width: 50%;
     margin: auto;
      */
     /* font-size: 75%; */
     /* margin: auto; */
-    /* text-align: center; */
 }
 
 .top {

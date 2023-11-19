@@ -76,6 +76,7 @@ function render() {
     // render the board
     renderBoard();
     // render the message
+    renderMessage();
     // render the controls
     renderControls();
 }
@@ -94,11 +95,26 @@ function renderBoard() {
             // to start with, just changing the background color to indicate marked
             squareEl.style.backgroundColor = colors[cellVal];
             // set the text of the square to the appropriate marker
-            // squareEl.innerHTML = `<h3>${markers[cellVal]}</h3>`;
+            // squareEl.innerText = markers[cellVal];
             // console.log('cellVal in renderBoard', cellVal);
             // console.log('markers[cellVal] in renderBoard', markers[cellVal]);
         });
     });
+}
+
+// renderMessage updates the message on the screen to indicate winner, tie, or whose turn
+function renderMessage() {
+    
+    // if tie, tell them nice try
+    if (winner === 'T') {
+        messageEl.innerText = "CAT! It's a Tie!";
+    } else if (winner) {
+        // if winner, annouce winner
+        messageEl.innerText = `${markers[winner]} Wins!!`;
+    } else {
+        // otherwise tell the player who's turn it is
+        messageEl.innerText = `${markers[turn]}'s Turn`
+    }
 }
 
 // renderControls determines if the reset button is displayed or not
