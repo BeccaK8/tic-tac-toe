@@ -106,6 +106,7 @@ function renderBoard() {
 
 // renderMessage updates the message on the screen to indicate winner, tie, or whose turn
 function renderMessage() {
+    console.log('squareSelected in beginning of renderMessage', squareSelected);
 
     // if tie, tell them nice try
     if (winner === 'T') {
@@ -115,8 +116,12 @@ function renderMessage() {
         messageEl.innerText = `${markers[winner]} Wins!!`;
     } else {
         // otherwise tell the player who's turn it is
-        messageEl.innerText = `${markers[turn]}'s Turn`
+        // if square is already selected, tell them to pick another one
+        messageEl.innerText = `${squareSelected ? 'That square is already taken! ' : ''}${markers[turn]}'s Turn`;
+        // reset squareSelected
+        squareSelected = false;
     }
+    console.log('squareSelected in end of renderMessage', squareSelected);
 }
 
 // renderControls determines if the reset button is displayed or not
@@ -150,17 +155,17 @@ function handlePick(event) {
     if (rowIdx === -1) return;
     //   2. they picked a square that's already selected
     if (Math.abs(rowArr[colIdx]) === 1) {
+        console.log('pick is already selected in handlePick');
         squareSelected = true;
-        return;
-    }
-
-    // if the move is valid, update the board array accordingly
-    rowArr[colIdx] = turn;
-
-    // change whose turn it is
-    turn *= -1;
-
-    // check for winner
+    } else {
+        // if the move is valid, update the board array accordingly
+        rowArr[colIdx] = turn;
+    
+        // change whose turn it is
+        turn *= -1;
+    
+        // check for winner
+    }    
 
     // update board, message, and controls
     render();
