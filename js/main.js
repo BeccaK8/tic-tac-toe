@@ -177,10 +177,12 @@ function handlePick(event) {
     console.log('rowArr in handlePick', rowArr);
 
     // check if the move is invalid
-    // a move is invalid in two ways:
+    // a move is invalid in three ways:
     //   1. they didn't selected a valid square - so just return
     if (rowIdx === -1 || colIdx === -1) return;
-    //   2. they picked a square that's already selected - update squareSelected but don't return because we want board to be updated
+    //   2. there's already a winner
+    if (winner) return;
+    //   3. they picked a square that's already selected - update squareSelected but don't return because we want board to be updated
     if (Math.abs(rowArr[colIdx]) === 1) {
         console.log('pick is already selected in handlePick');
         squareSelected = true;
