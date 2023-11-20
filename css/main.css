@@ -36,8 +36,8 @@ h2 {
 }    
 
 #squares > div {
-    width: 120px;
-    height: 120px;
+    width: 15vh;
+    height: 15vh;
     
     /* padding-top: 100%; */
     font-size: 12vmin;
@@ -79,7 +79,8 @@ button:hover {
     transition: transform 150ms ease-in-out;
 }
 
-.gameMode {
-    display: block;
+#gameMode {
+    display: inline-block; 
+    margin-top: 2.5%;
 }
 
