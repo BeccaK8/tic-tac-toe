@@ -31,6 +31,7 @@ let board;  // this will be a 3x3 nested array
 let turn;   // 1 || -1, depending on whose turn it is
 let winner; // null || 1 || -1 || 'T' (tie), depending on who, if anyone, has won
 let squareSelected; // true || false depending on if the square was already picked
+let mode; // marker || color
 
 //==================================================================
 // cached DOM elements
@@ -61,6 +62,8 @@ function init() {
     turn = 1;
     winner = null;
     squareSelected = false;
+    mode = document.querySelector('input[name="mode"]:checked').value;
+    if (!mode) mode = 'marker';
 
     // console.log('board in init', board);
     // console.log('turn in init', turn);
@@ -94,8 +97,15 @@ function renderBoard() {
             // console.log('cellId in renderBoard', cellId);
             const squareEl = document.getElementById(cellId);
             // console.log('squareEl in renderBoard', squareEl);
-            // to start with, just changing the background color to indicate marked
-            squareEl.style.backgroundColor = colors[cellVal];
+            // if color mode, change the background color to indicate marked and clear out any marker in the square
+            if (mode === 'color') {
+                squareEl.style.backgroundColor = colors[cellVal];
+                squareEl.innerText = '';
+            } else {
+                // otherwise, set the X/O marker and reset the color to neutral (not picked)
+                squareEl.innerText = markers[cellVal];
+                squareEl.style.backgroundColor = colors[0];
+            }
             // set the text of the square to the appropriate marker
             // squareEl.innerText = markers[cellVal];
             // console.log('cellVal in renderBoard', cellVal);
@@ -113,11 +123,28 @@ function renderMessage() {
         messageEl.innerText = "CAT! It's a Tie!";
     } else if (winner) {
         // if winner, annouce winner
-        messageEl.innerText = `${markers[winner]} Wins!!`;
+        if (mode === 'color') {
+            messageEl.innerHTML = `
+                <span style="color: ${colors[winner]}">
+                    ${colors[winner].toUpperCase()}
+                </span> Wins!!
+            `;
+        } else {
+            messageEl.innerText = `${markers[winner].toUpperCase()} Wins!!`;
+        }
     } else {
         // otherwise tell the player who's turn it is
         // if square is already selected, tell them to pick another one
-        messageEl.innerText = `${squareSelected ? 'That square is already taken! ' : ''}${markers[turn]}'s Turn`;
+        if (mode === 'color') {
+            messageEl.innerHTML = `
+                ${squareSelected ? 'That square is already taken! ' : ''}
+                <span style="color: ${colors[turn]}">
+                    ${colors[turn].toUpperCase()}
+                </span>'s Turn
+            `;
+        } else {
+            messageEl.innerText = `${squareSelected ? 'That square is already taken! ' : ''}${markers[turn].toUpperCase()}'s Turn`;
+        }
         // reset squareSelected
         squareSelected = false;
     }
@@ -177,15 +204,15 @@ function handlePick(event) {
 }
 
 function getWinner(rowIdx, colIdx) {
-    // check for tie
     // check for horizontal win
     // check for vertical win
     // check for diagonal win
-    return checkTie() 
-        || checkHorizontalWin(rowIdx, colIdx)
+    // check for tie
+    return checkHorizontalWin(rowIdx, colIdx)
         || checkVerticalWin(rowIdx, colIdx)
         || checkDiagonalNWtoSEWin(rowIdx, colIdx)
-        || checkDiagonalNEtoSWWin(rowIdx, colIdx);
+        || checkDiagonalNEtoSWWin(rowIdx, colIdx)
+        || checkTie();
 }
 
 function checkTie() {
@@ -267,6 +294,11 @@ function countAdjacentSquares(rowIdx, colIdx, rowOffset, colOffset) {
     return countAdj;
 }
 
+function handleGameMode(event) {
+   console.log('in handleGameMode', event.target.value); 
+    // change the mode to either marker or color based on which radio button is clicked
+    mode = event.target.value;
+}
 
 //==================================================================
 // event listeners
@@ -276,3 +308,8 @@ document.getElementById('squares').addEventListener('click', handlePick);
 
 // add an event listener to the reset game button that will trigger initialize
 resetButton.addEventListener('click', init);
+
+// add an event listener to the game mode radio buttons
+document.getElementById('marker').addEventListener('click', handleGameMode);
+document.getElementById('color').addEventListener('click', handleGameMode);
+
