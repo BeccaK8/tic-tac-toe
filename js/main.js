@@ -20,7 +20,7 @@ const markers = {
 };
 const colors = {
     0: 'white',
-    1: 'blue',
+    1: 'navy',
     '-1': 'orange'
 }
 
@@ -42,10 +42,6 @@ const resetButton = document.querySelector('button');
 // save squares as an array rather than a NodeList
 const squaresEl = [...document.querySelectorAll('#squares > div')];
 
-// console.log('messageEl at cached', messageEl);
-// console.log('resetButton at cached', resetButton);
-// console.log('squaresEl at cached', squaresEl);
-
 //==================================================================
 // functions 
 //==================================================================
@@ -64,10 +60,6 @@ function init() {
     squareSelected = false;
     mode = document.querySelector('input[name="mode"]:checked').value;
     if (!mode) mode = 'marker';
-
-    // console.log('board in init', board);
-    // console.log('turn in init', turn);
-    // console.log('winner in init', winner);
 
     // render the board, message, and controls
     render();
@@ -94,9 +86,7 @@ function renderBoard() {
         rowArr.forEach((cellVal, colIdx) => {
             // find the element for that square
             const cellId = `r${rowIdx}c${colIdx}`;
-            // console.log('cellId in renderBoard', cellId);
             const squareEl = document.getElementById(cellId);
-            // console.log('squareEl in renderBoard', squareEl);
             // if color mode, change the background color to indicate marked and clear out any marker in the square
             if (mode === 'color') {
                 squareEl.style.backgroundColor = colors[cellVal];
@@ -106,18 +96,12 @@ function renderBoard() {
                 squareEl.innerText = markers[cellVal];
                 squareEl.style.backgroundColor = colors[0];
             }
-            // set the text of the square to the appropriate marker
-            // squareEl.innerText = markers[cellVal];
-            // console.log('cellVal in renderBoard', cellVal);
-            // console.log('markers[cellVal] in renderBoard', markers[cellVal]);
         });
     });
 }
 
 // renderMessage updates the message on the screen to indicate winner, tie, or whose turn
 function renderMessage() {
-    // console.log('squareSelected in beginning of renderMessage', squareSelected);
-
     // if tie, tell them nice try
     if (winner === 'T') {
         messageEl.innerText = "CAT! It's a Tie!";
@@ -138,9 +122,7 @@ function renderMessage() {
         if (mode === 'color') {
             messageEl.innerHTML = `
                 ${squareSelected ? 'That square is already taken! ' : ''}
-                <span style="color: ${colors[turn]}">
-                    ${colors[turn].toUpperCase()}
-                </span>'s Turn
+                <span style="color: ${colors[turn]}">${colors[turn].toUpperCase()}</span>'s Turn
             `;
         } else {
             messageEl.innerText = `${squareSelected ? 'That square is already taken! ' : ''}${markers[turn].toUpperCase()}'s Turn`;
@@ -148,20 +130,16 @@ function renderMessage() {
         // reset squareSelected
         squareSelected = false;
     }
-    // console.log('squareSelected in end of renderMessage', squareSelected);
 }
 
 // renderControls determines if the reset button is displayed or not
 function renderControls() {
     // if there's not a winner, hide the button; otherwise show it
-    // console.log('winner in renderControls', winner);
     resetButton.style.visibility = winner ? 'visible' : 'hidden';
 }
 
 // handlePick will be the game play function
 function handlePick(event) {
-    console.log('pick made!  (inside handlePick)');
-
     // first figure out what row and column were selected
     // index of the squares will be 0 - 8, so we need to calculate the actual row and col using DIV and MOD functions 
     // to allow us to manipulate board array appropriately
@@ -169,12 +147,8 @@ function handlePick(event) {
     const rowIdx = Math.floor(squareIdx / 3);
     const colIdx = squareIdx % 3;
 
-    console.log('rowIdx in handlePick before checking invalids', rowIdx);
-    console.log('colIdx in handlePick before checking invalids', colIdx);
-
     // get the row array for the board
     const rowArr = board[rowIdx];
-    console.log('rowArr in handlePick', rowArr);
 
     // check if the move is invalid
     // a move is invalid in three ways:
@@ -184,7 +158,6 @@ function handlePick(event) {
     if (winner) return;
     //   3. they picked a square that's already selected - update squareSelected but don't return because we want board to be updated
     if (Math.abs(rowArr[colIdx]) === 1) {
-        console.log('pick is already selected in handlePick');
         squareSelected = true;
     } else {
         // if the move is valid, update the board array accordingly
@@ -194,15 +167,11 @@ function handlePick(event) {
         turn *= -1;
     
         // check for winner
-        console.log('winner before calling getWinner in handlePick', winner);
         winner = getWinner(rowIdx, colIdx);
-        console.log('winner after calling getWinner in handlePick', winner);
     }    
 
     // update board, message, and controls
     render();
-
-    console.log('current state of board after handlePick', board);
 }
 
 function getWinner(rowIdx, colIdx) {
@@ -224,7 +193,6 @@ function checkTie() {
             if (cell === 0) return null;
         }
     }
-    // console.log('there are no 0s left in checkTie');
     // no open spots if we made it out of double loops, so it's a tie
     return 'T';
 }
@@ -268,7 +236,6 @@ function checkDiagonalNEtoSWWin(rowIdx, colIdx) {
 function countAdjacentSquares(rowIdx, colIdx, rowOffset, colOffset) {
     // get the most recently played player
     const player = board[rowIdx][colIdx];
-    console.log('player in countAdjacentSquares', player);
 
     // set initial count of adjacent squares for same player
     let countAdj = 0;
@@ -297,7 +264,6 @@ function countAdjacentSquares(rowIdx, colIdx, rowOffset, colOffset) {
 }
 
 function handleGameMode(event) {
-   console.log('in handleGameMode', event.target.value); 
     // change the mode to either marker or color based on which radio button is clicked
     mode = event.target.value;
 }
